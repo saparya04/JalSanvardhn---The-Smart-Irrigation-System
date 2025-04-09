@@ -1,29 +1,21 @@
+// import { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "aos/dist/aos.css";
-import { useEffect } from "react";
-import AOS from "aos";
-import gsap from "gsap";
-
+import CropData from "./pages/CropData";
+import WaterFlowInput from "./pages/WaterFlowInput";
+import './App.css'
 function App() {
-  useEffect(() => {
-    AOS.init({ duration: 1000 });
-
-    // Example GSAP Animation (Optional)
-    gsap.from(".main-content", { opacity: 1, y: 50, duration: 1 });
-  }, []);
-
   return (
     <Router>
-      <div className="main-content">
-        <Routes>
-          <Route path="/" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/crop-data" element={<CropData />} />
+        <Route path="/water-flow" element={<WaterFlowInput />} />
+      </Routes>
     </Router>
   );
 }
 export default App;
+//new change
