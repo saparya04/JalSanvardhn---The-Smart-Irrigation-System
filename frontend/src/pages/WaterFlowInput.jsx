@@ -759,6 +759,7 @@ import axios from "axios";
 import GaugeChart from "../components/GaugeChart";
 import styled from "styled-components";
 import { motion } from "framer-motion";
+import { FaInstagramSquare, FaLinkedin, FaGithub } from "react-icons/fa";
 import bgVideo from "../assets/background_vid.mp4";
 
 const WaterFlowInput = () => {
@@ -803,6 +804,8 @@ const WaterFlowInput = () => {
     }
   }, [result]);
 
+  const explanationItems = explanation?.split("\n").filter(Boolean);
+
   return (
     <Container>
       <BackgroundVideo autoPlay loop muted>
@@ -810,57 +813,60 @@ const WaterFlowInput = () => {
         Your browser does not support the video tag.
       </BackgroundVideo>
 
-      <motion.h1
-        initial={{ opacity: 0, y: -30 }}
+      {/* ✅ Header with Extended Nav */}
+      <motion.header
+        className="flex items-center justify-between mb-8 py-2 px-4"
+        initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
+        transition={{ duration: 0.5 }}
       >
+        <motion.div
+          className="flex items-center gap-2"
+          whileHover={{ scale: 1.05 }}
+          transition={{ type: "spring", stiffness: 400, damping: 10 }}
+        >
+          <img src="../src/assets/Logo.svg" alt="Organic Farm Logo" width={80} height={100} className="object-contain" />
+          <span className="font-semibold text-white text-xl">Jal Sanvardhan</span>
+        </motion.div>
+        <div className="hidden md:flex items-center gap-6">
+          {["Home", "CropData", "WaterFlow", "Register", "Login", "Contact Us"].map((item, index) => (
+            <motion.div
+              key={item}
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: 0.1 * index }}
+            >
+              <a
+                href={`/${item === "Home" ? "" : item.toLowerCase().replace(/\s+/g, "-")}`}
+                className="text-white hover:text-[#b7e4c7] font-medium relative group"
+              >
+                {item}
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#b7e4c7] transition-all group-hover:w-full duration-300"></span>
+              </a>
+            </motion.div>
+          ))}
+        </div>
+      </motion.header>
+
+      <motion.h1 initial={{ opacity: 0, y: -30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
         🌾 Irrigation Required for the Crop
       </motion.h1>
 
-      <motion.h2
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.5 }}
-      >
+      <motion.h2 initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
         💧 Water Flow Prediction
       </motion.h2>
 
-      <FormCard
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-      >
+      <FormCard initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
         <form onSubmit={handleSubmit}>
-          <input
-            name="soilType"
-            placeholder="Soil Type"
-            onChange={(e) => setForm({ ...form, soilType: e.target.value })}
-            required
-          />
-          <input
-            name="region"
-            placeholder="Region"
-            onChange={(e) => setForm({ ...form, region: e.target.value })}
-            required
-          />
-          <input
-            name="weatherCondition"
-            placeholder="Weather Condition"
-            onChange={(e) => setForm({ ...form, weatherCondition: e.target.value })}
-            required
-          />
+          <input name="soilType" placeholder="Soil Type" onChange={(e) => setForm({ ...form, soilType: e.target.value })} required />
+          <input name="region" placeholder="Region" onChange={(e) => setForm({ ...form, region: e.target.value })} required />
+          <input name="weatherCondition" placeholder="Weather Condition" onChange={(e) => setForm({ ...form, weatherCondition: e.target.value })} required />
           <button type="submit">🌿 Predict</button>
         </form>
       </FormCard>
 
       {result && (
-        <motion.div
-          ref={resultRef}
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-        >
+        <motion.div ref={resultRef} initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
           <ResultCard>
             {result.error ? (
               <motion.p initial={{ scale: 0 }} animate={{ scale: 1 }} style={{ color: "red" }}>
@@ -868,49 +874,77 @@ const WaterFlowInput = () => {
               </motion.p>
             ) : (
               <>
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                >
-                  <h3>🚿 Predicted Water Flow: <span>{result.waterFlow} L/h</span></h3>
-                </motion.div>
+                <InfoGaugeRow>
+                  <GroupedInfo initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>
+                    <h3>📊 Summary</h3>
+                    <p>🚿 <strong>Predicted Water Flow:</strong> {result.waterFlow} L/h</p>
+                    <p>🌡 <strong>Temperature:</strong> {temperature}°C</p>
+                    <p>💧 <strong>Humidity:</strong> {humidity}%</p>
+                  </GroupedInfo>
 
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.5 }}
-                >
-                  <p>🌡 Temperature: <strong>{temperature}°C</strong></p>
-                  <p>💧 Humidity: <strong>{humidity}%</strong></p>
-                </motion.div>
+                  <GaugeWrapper
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", stiffness: 120, damping: 10, delay: 0.6 }}
+                  >
+                    <GaugeValue>{result.waterFlow} L/h</GaugeValue>
+                    <GaugeChart value={parseFloat(result.waterFlow)} width={300} height={200} />
+                  </GaugeWrapper>
+                </InfoGaugeRow>
 
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ type: "spring", stiffness: 120, damping: 10, delay: 0.8 }}
-                >
-                  <GaugeChart value={parseFloat(result.waterFlow)} />
-                </motion.div>
+                <motion.h3 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9 }}>
+                  💡 Facts about your Crop!!
+                </motion.h3>
 
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 1 }}
-                >
-                  <h3>💡 Gemini Insights</h3>
-                  <InsightText>{explanation}</InsightText>
-                </motion.div>
+                <QAWrapper>
+                  {explanationItems?.slice(0, -1).reduce((acc, item, i, arr) => {
+                    if (i % 2 === 0 && arr[i + 1]) {
+                      acc.push(
+                        <QADiv key={i}>
+                          <div className="question">{arr[i]}</div>
+                          <div className="answer">{arr[i + 1]}</div>
+                        </QADiv>
+                      );
+                    }
+                    return acc;
+                  }, [])}
+                </QAWrapper>
+
+                {explanationItems?.length % 2 === 1 && (
+                  <FinalNote initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.8 }}>
+                    <p>{explanationItems[explanationItems.length - 1]}</p>
+                  </FinalNote>
+                )}
               </>
             )}
           </ResultCard>
         </motion.div>
       )}
+
+      {/* ✅ Footer Section */}
+      <footer className="mt-20 pt-8 pb-4 border-t border-[#333] text-center text-sm text-white flex flex-col gap-4 items-center">
+        <div className="flex gap-4">
+          <a href="https://www.instagram.com/clavenncoutinho/" target="_blank" rel="noopener noreferrer">
+            <FaInstagramSquare className="w-6 h-6 text-white hover:scale-110 transition-transform" />
+          </a>
+          <a href="https://www.linkedin.com/in/claven-coutinho/" target="_blank" rel="noopener noreferrer">
+            <FaLinkedin className="w-6 h-6 text-white hover:scale-110 transition-transform" />
+          </a>
+          <a href="https://github.com/saparya04/JalSanvardhn-The-Smart-Irrigation-system-" target="_blank" rel="noopener noreferrer">
+            <FaGithub className="w-6 h-6 text-white hover:scale-110 transition-transform" />
+          </a>
+        </div>
+        <div>Contact us: support@jalsanvardhan.com | +91-9967304451</div>
+        <div>© {new Date().getFullYear()} Jal Sanvardhan. All rights reserved.</div>
+      </footer>
     </Container>
   );
 };
 
 export default WaterFlowInput;
+
+
+
 
 // Styled Components
 const Container = styled.div`
@@ -938,8 +972,8 @@ const FormCard = styled(motion.div)`
   backdrop-filter: blur(6px);
   padding: 2rem;
   border-radius: 20px;
-  max-width: 500px;
-  margin: 2rem auto;
+  max-width: 700px;
+  margin: 4rem auto;
   box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
 
   input {
@@ -971,36 +1005,113 @@ const FormCard = styled(motion.div)`
 `;
 
 const ResultCard = styled.div`
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(77, 83, 97, 0.68);
   color: #000;
   backdrop-filter: blur(8px);
   padding: 2rem;
-  border-radius: 20px;
-  max-width: 900px;
+  border-radius: 70px;
+  max-width: 1100px;
   margin: 2rem auto;
-  font-size: 1.1rem;
-  line-height: 1.7;
-  box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
+  font-size: 2rem;
+  line-height: 1.8;
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
 
   h3 {
     margin-top: 1.5rem;
     font-weight: bold;
-    font-size: 1.3rem;
+    font-size: 1.9rem;
   }
 
   span {
-    color: #0077cc;
+    color:rgb(132, 197, 243);
     font-weight: bold;
   }
 `;
 
-const InsightText = styled.p`
-  white-space: pre-wrap;
-  background: #f0f0f0;
-  padding: 1rem;
-  margin-top: 1rem;
-  border-radius: 10px;
-  color: #222;
-  font-style: italic;
+const GroupedInfo = styled(motion.div)`
+  background: rgb(197, 229, 244);
+  padding: 2rem;
+  border-radius: 15px;
+  margin-bottom: 1.6rem;
+  color: #000;
+  flex: 1;
+
+  p {
+    margin: 0.5rem 0;
+    font-size: 1.4rem;
+  }
+
+  h3 {
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+  }
 `;
 
+const GaugeWrapper = styled(motion.div)`
+  padding: 2rem 1rem;
+  background: #FFFFFF;
+  border-radius: 70px;
+  flex: 1;
+  box-shadow: 0 0 30px rgba(0, 123, 255, 0.2);
+
+  svg {
+    // width: 100% !important;
+    height: auto !important;
+  }
+`;
+
+const GaugeValue = styled.div`
+  font-size: 2rem;
+  font-weight: bold;
+  color:rgb(1, 24, 47);
+  margin-bottom: 1rem;
+`;
+
+const InfoGaugeRow = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  align-items: stretch;
+  margin-bottom: 2rem;
+`;
+
+const QAWrapper = styled.div`
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: left;
+`;
+
+const QADiv = styled.div`
+  background: rgba(245, 245, 245, 0.85);
+  padding: 1rem 1.5rem;
+  border-left: 5px solid #28a745;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+  color: #333;
+
+  .question {
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    font-size: 1rem;
+  }
+
+  .answer {
+    font-style: italic;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+`;
+
+const FinalNote = styled(motion.div)`
+  margin-top: 2rem;
+  background: #e9f7fe;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  color: #004080;
+  font-size: 0.95rem;
+  font-weight: 500;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+`;

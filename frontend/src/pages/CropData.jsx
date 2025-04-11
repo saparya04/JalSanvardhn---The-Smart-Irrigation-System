@@ -1,655 +1,24 @@
-// import { useState, useEffect } from "react";
-// import axios from "axios";
-// import { Form, Button, Container, Alert, Card, Row, Col } from "react-bootstrap";
-// import { motion } from "framer-motion";
-// import anime from "animejs";
-// import AOS from "aos";
-// import "aos/dist/aos.css";
-// import styled from "styled-components";
-// import cropGif from "../assets/Gardening.gif"; // Your animated GIF
-// import backgroundVideo from "../assets/background_vid.mp4"; // Add your 8-sec video
-// import { useNavigate } from "react-router-dom";
-
-// // Styled Components for Background Video
-// const VideoBackground = styled.video`
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   width: 100vw;
-//   height: 100vh;
-//   object-fit: cover;
-//   opacity: 0.4;  // Reduce opacity to make content visible
-//   z-index: -1;
-// `;
-
-// const Sun = styled.div`
-//   position: absolute;
-//   top: 10%;
-//   left: 75%;
-//   width: 100px;
-//   height: 100px;
-//   background: radial-gradient(circle, yellow 30%, orange 70%);
-//   border-radius: 50%;
-//   box-shadow: 0px 0px 50px rgba(255, 223, 0, 0.8);
-// `;
-
-// const Grain = styled.div`
-//   position: absolute;
-//   width: 10px;
-//   height: 10px;
-//   background: wheat;
-//   border-radius: 50%;
-//   opacity: 0.8;
-// `;
-
-// const CropData = () => {
-//   const [form, setForm] = useState({ cropType: "", cropDays: "", area: ""});
-//   const [report, setReport] = useState(null);
-//   const [error, setError] = useState(null);
-//   const navigate = useNavigate();
-
-//   useEffect(() => {
-//     AOS.init({ duration: 1000 });
-
-//     anime({
-//       targets: ".sun",
-//       translateY: [-10, 10],
-//       direction: "alternate",
-//       loop: true,
-//       easing: "easeInOutSine",
-//       duration: 4000,
-//     });
-
-//     anime({
-//       targets: ".grain",
-//       translateY: [-30, 0],
-//       translateX: [-10, 10],
-//       direction: "alternate",
-//       loop: true,
-//       easing: "easeInOutQuad",
-//       duration: 5000,
-//       delay: anime.stagger(200),
-//     });
-//   }, []);
-
-//   const handleChange = (e) => {
-//     setForm({ ...form, [e.target.name]: e.target.value });
-//   };
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     setError(null);
-//     const userId = localStorage.getItem("userId");
-
-//     if (!userId) {
-//       setError("User ID not found. Please log in.");
-//       return;
-//     }
-
-//     try {
-//       const { data } = await axios.post("http://localhost:5000/api/crop/save", { ...form, userId });
-//       setReport(data);
-//       localStorage.setItem("explanation", data.explanation); 
-//       if (data.irrigationRequired) {
-//         localStorage.setItem("cropType", data.cropType);
-//         localStorage.setItem("temperature", data.temperature);
-//         localStorage.setItem("humidity", data.humidity);
-//         navigate("/water-flow");
-//     }
-//   } 
-//     catch (err) {
-//       setError(err.response?.data?.error || "Something went wrong.");
-//     }
-//   };
-
-
-//   return (
-//     <Container className="d-flex align-items-center justify-content-center min-vh-100 position-relative">
-//       {/* Video Background */}
-//       <VideoBackground autoPlay loop muted>
-//         <source src={backgroundVideo} type="video/mp4" />
-//       </VideoBackground>
-
-//       {/* Animated Sun */}
-//       <Sun className="sun" />
-
-//       {/* Floating Grains */}
-//       {[...Array(10)].map((_, i) => (
-//         <Grain key={i} className="grain" style={{ top: `${Math.random() * 80 + 10}%`, left: `${Math.random() * 90}%` }} />
-//       ))}
-
-//       <Row className="w-100 justify-content-center">
-//         <Col md={10} lg={8}>
-//           <Card className="p-4 shadow-lg bg-secondary text-white rounded" data-aos="fade-up">
-//             <Row>
-//               <Col md={6} className="d-flex align-items-center justify-content-center">
-//                 <motion.img
-//                   src={cropGif}
-//                   alt="Growing Crops"
-//                   className="img-fluid"
-//                   initial={{ opacity: 0, scale: 0.8 }}
-//                   animate={{ opacity: 1, scale: 1 }}
-//                   transition={{ duration: 1.5 }}
-//                 />
-//               </Col>
-//               <Col md={6}>
-//                 <motion.h2 
-//                   className="text-center mb-4 fw-bold"
-//                   initial={{ opacity: 0 }}
-//                   animate={{ opacity: 1 }}
-//                   transition={{ duration: 1 }}
-//                 >
-//                   Enter Crop Details
-//                 </motion.h2>
-
-//                 {error && <Alert variant="danger">{error}</Alert>}
-
-//                 <Form onSubmit={handleSubmit}>
-//                   <Form.Group className="mb-3">
-//                     <Form.Label className="fw-bold">Crop Type</Form.Label>
-//                     <Form.Control type="text" name="cropType" placeholder="Enter crop type" value={form.cropType} onChange={handleChange} required />
-//                   </Form.Group>
-//                   <Form.Group className="mb-3">
-//                     <Form.Label className="fw-bold">Crop Days</Form.Label>
-//                     <Form.Control type="text" name="cropDays" placeholder="Enter Crop days" value={form.cropDays} onChange={handleChange} required />
-//                   </Form.Group>
-//                   <Form.Group className="mb-3">
-//                     <Form.Label className="fw-bold">Location</Form.Label>
-//                     <Form.Control type="text" name="area" placeholder="Enter location" value={form.area} onChange={handleChange} required />
-//                   </Form.Group>
-//                   {/* <Form.Group className="mb-3">
-//                     <Form.Label className="fw-bold">Weather Condition</Form.Label>
-//                     <Form.Control type="text" name="weatherCondition" placeholder="Enter weather condition" value={form.weatherCondition} onChange={handleChange} required />
-//                   </Form.Group>
-//                   <Form.Group className="mb-3">
-//                     <Form.Label className="fw-bold">Location</Form.Label>
-//                     <Form.Control type="text" name="area" placeholder="Enter location" value={form.area} onChange={handleChange} required />
-//                   </Form.Group> */}
-
-//                   <motion.div whileHover={{ scale: 1.05 }}>
-//                     <Button type="submit" className="w-100 fw-bold p-2">
-//                       Save Details
-//                     </Button>
-//                   </motion.div>
-//                 </Form>
-
-//                 {report && (
-//                   <motion.div 
-//                     className="mt-4 p-3 bg-dark rounded text-center"
-//                     initial={{ opacity: 0 }}
-//                     animate={{ opacity: 1 }}
-//                     transition={{ duration: 1 }}
-//                   >
-//                     <h3>Report</h3>
-//                     <p>Temperature: {report.temperature}°C</p>
-//                     <p>Humidity: {report.humidity}%</p>
-//                     <p><strong>{report.irrigationRequired ? "Irrigation is required" : "No irrigation required"}</strong></p>
-//                     <h4>💡 Gemini Insights</h4>
-//                     <p style={{ whiteSpace: "pre-wrap" }}>{report.explanation}</p>
-//                   </motion.div>
-//                 )}
-//               </Col>
-//             </Row>
-//           </Card>
-//         </Col>
-//       </Row>
-//     </Container>
-//   );
-// };
-
-// export default CropData;
-
-
-// import { useState, useEffect } from "react";
-// import axios from "axios";
-// import { Form, Button, Container, Alert, Card, Row, Col } from "react-bootstrap";
-// import { motion } from "framer-motion";
-// import anime from "animejs";
-// import AOS from "aos";
-// import "aos/dist/aos.css";
-// import styled from "styled-components";
-// import cropGif from "../assets/Gardening.gif";
-// import backgroundVideo from "../assets/background_vid.mp4";
-// import { useNavigate } from "react-router-dom";
-
-// // Styled Components for Background Video
-// const VideoBackground = styled.video`
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   width: 100vw;
-//   height: 100vh;
-//   object-fit: cover;
-//   opacity: 0.4;
-//   z-index: -1;
-// `;
-
-// const Sun = styled.div`
-//   position: absolute;
-//   top: 10%;
-//   left: 75%;
-//   width: 100px;
-//   height: 100px;
-//   background: radial-gradient(circle, yellow 30%, orange 70%);
-//   border-radius: 50%;
-//   box-shadow: 0px 0px 50px rgba(255, 223, 0, 0.8);
-// `;
-
-// const Grain = styled.div`
-//   position: absolute;
-//   width: 10px;
-//   height: 10px;
-//   background: wheat;
-//   border-radius: 50%;
-//   opacity: 0.8;
-// `;
-
-// const CropData = () => {
-//   const [form, setForm] = useState({ cropType: "", cropDays: "", area: "" });
-//   const [report, setReport] = useState(null);
-//   const [error, setError] = useState(null);
-//   const navigate = useNavigate();
-
-//   useEffect(() => {
-//     AOS.init({ duration: 1000 });
-
-//     anime({
-//       targets: ".sun",
-//       translateY: [-10, 10],
-//       direction: "alternate",
-//       loop: true,
-//       easing: "easeInOutSine",
-//       duration: 4000,
-//     });
-
-//     anime({
-//       targets: ".grain",
-//       translateY: [-30, 0],
-//       translateX: [-10, 10],
-//       direction: "alternate",
-//       loop: true,
-//       easing: "easeInOutQuad",
-//       duration: 5000,
-//       delay: anime.stagger(200),
-//     });
-//   }, []);
-
-//   const handleChange = (e) => {
-//     setForm({ ...form, [e.target.name]: e.target.value });
-//   };
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     setError(null);
-//     const userId = localStorage.getItem("userId");
-
-//     if (!userId) {
-//       setError("User ID not found. Please log in.");
-//       return;
-//     }
-
-//     try {
-//       const { data } = await axios.post("http://localhost:5000/api/crop/save", { ...form, userId });
-//       setReport(data);
-//       localStorage.setItem("explanation", data.explanation);
-//       if (data.irrigationRequired) {
-//         localStorage.setItem("cropType", data.cropType);
-//         localStorage.setItem("temperature", data.temperature);
-//         localStorage.setItem("humidity", data.humidity);
-//         navigate("/water-flow");
-//       }
-//     } catch (err) {
-//       setError(err.response?.data?.error || "Something went wrong.");
-//     }
-//   };
-
-//   return (
-//     <Container className="d-flex align-items-center justify-content-center min-vh-100 position-relative">
-//       {/* Video Background */}
-//       <VideoBackground autoPlay loop muted>
-//         <source src={backgroundVideo} type="video/mp4" />
-//       </VideoBackground>
-
-//       {/* Animated Sun */}
-//       <Sun className="sun" />
-
-//       {/* Floating Grains */}
-//       {[...Array(10)].map((_, i) => (
-//         <Grain key={i} className="grain" style={{ top: `${Math.random() * 80 + 10}%`, left: `${Math.random() * 90}%` }} />
-//       ))}
-
-//       <Row className="w-100 justify-content-center">
-//         <Col md={10} lg={8}>
-//           <Card className="p-4 shadow-lg bg-secondary text-white rounded" data-aos="fade-up">
-//             <Row>
-//               <Col md={6} className="d-flex align-items-center justify-content-center">
-//                 <motion.img
-//                   src={cropGif}
-//                   alt="Growing Crops"
-//                   className="img-fluid"
-//                   initial={{ opacity: 0, scale: 0.8 }}
-//                   animate={{ opacity: 1, scale: 1 }}
-//                   transition={{ duration: 1.5 }}
-//                 />
-//               </Col>
-//               <Col md={6}>
-//                 <motion.h2 
-//                   className="text-center mb-4 fw-bold"
-//                   initial={{ opacity: 0 }}
-//                   animate={{ opacity: 1 }}
-//                   transition={{ duration: 1 }}
-//                 >
-//                   Enter Crop Details
-//                 </motion.h2>
-
-//                 {error && <Alert variant="danger">{error}</Alert>}
-
-//                 <Form onSubmit={handleSubmit}>
-//                   <Form.Group className="mb-3">
-//                     <Form.Label className="fw-bold">Crop Type</Form.Label>
-//                     <Form.Control type="text" name="cropType" placeholder="Enter crop type" value={form.cropType} onChange={handleChange} required />
-//                   </Form.Group>
-//                   <Form.Group className="mb-3">
-//                     <Form.Label className="fw-bold">Crop Days</Form.Label>
-//                     <Form.Control type="number" name="cropDays" placeholder="Enter Crop days" value={form.cropDays} onChange={handleChange} required />
-//                   </Form.Group>
-//                   <Form.Group className="mb-3">
-//                     <Form.Label className="fw-bold">Location</Form.Label>
-//                     <Form.Control type="text" name="area" placeholder="Enter location" value={form.area} onChange={handleChange} required />
-//                   </Form.Group>
-
-//                   <motion.div whileHover={{ scale: 1.05 }}>
-//                     <Button type="submit" className="w-100 fw-bold p-2">
-//                       Save Details
-//                     </Button>
-//                   </motion.div>
-//                 </Form>
-
-//                 {report && (
-//                   <motion.div 
-//                     className="mt-4 p-3 bg-dark rounded text-center"
-//                     initial={{ opacity: 0 }}
-//                     animate={{ opacity: 1 }}
-//                     transition={{ duration: 1 }}
-//                   >
-//                     <h3>{report.irrigationRequired ? "Irrigation is required" : "No Irrigation Required"}</h3>
-
-//                     <p>Temperature: {report.temperature}°C</p>
-//                     <p>Humidity: {report.humidity}%</p>
-//                     <h4>💡 Gemini Insights</h4>
-//                     <p style={{ whiteSpace: "pre-wrap" }}>{report.explanation}</p>
-//                   </motion.div>
-//                 )}
-//               </Col>
-//             </Row>
-//           </Card>
-//         </Col>
-//       </Row>
-//     </Container>
-//   );
-// };
-
-// export default CropData;
-
-
-// import { useState, useEffect } from "react";
-// import axios from "axios";
-// import { Form, Button, Container, Alert, Card, Row, Col } from "react-bootstrap";
-// import { motion } from "framer-motion";
-// import anime from "animejs";
-// import AOS from "aos";
-// import "aos/dist/aos.css";
-// import styled from "styled-components";
-// import cropGif from "../assets/Gardening.gif";
-// import backgroundVideo from "../assets/background_vid.mp4";
-// import { useNavigate } from "react-router-dom";
-
-// // Styled Components for Background Video
-// const VideoBackground = styled.video`
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   width: 100vw;
-//   height: 100vh;
-//   object-fit: cover;
-//   opacity: 0.4;
-//   z-index: -1;
-// `;
-
-// const Sun = styled.div`
-//   position: absolute;
-//   top: 10%;
-//   left: 75%;
-//   width: 100px;
-//   height: 100px;
-//   background: radial-gradient(circle, yellow 30%, orange 70%);
-//   border-radius: 50%;
-//   box-shadow: 0px 0px 50px rgba(255, 223, 0, 0.8);
-// `;
-
-// const Grain = styled.div`
-//   position: absolute;
-//   width: 10px;
-//   height: 10px;
-//   background: wheat;
-//   border-radius: 50%;
-//   opacity: 0.8;
-// `;
-
-// const CropData = () => {
-//   const [form, setForm] = useState({ cropType: "", cropDays: "", area: "" });
-//   const [report, setReport] = useState(null);
-//   const [error, setError] = useState(null);
-//   const navigate = useNavigate();
-
-//   useEffect(() => {
-//     AOS.init({ duration: 1000 });
-
-//     anime({
-//       targets: ".sun",
-//       translateY: [-10, 10],
-//       direction: "alternate",
-//       loop: true,
-//       easing: "easeInOutSine",
-//       duration: 4000,
-//     });
-
-//     anime({
-//       targets: ".grain",
-//       translateY: [-30, 0],
-//       translateX: [-10, 10],
-//       direction: "alternate",
-//       loop: true,
-//       easing: "easeInOutQuad",
-//       duration: 5000,
-//       delay: anime.stagger(200),
-//     });
-//   }, []);
-
-//   const handleChange = (e) => {
-//     setForm({ ...form, [e.target.name]: e.target.value });
-//   };
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     setError(null);
-//     const userId = localStorage.getItem("userId");
-//     if (!userId) return setError("Login required");
-
-//     try {
-//       const { data } = await axios.post("http://localhost:5000/api/crop/save", { ...form, userId });
-//       setReport(data);
-//       localStorage.setItem("explanation", data.explanation);
-
-//       if (data.irrigationRequired) {
-//         localStorage.setItem("cropType", data.cropType);
-//         localStorage.setItem("temperature", data.temperature);
-//         localStorage.setItem("humidity", data.humidity);
-//         navigate("/water-flow");
-//       }
-//     } catch (err) {
-//       setError(err.response?.data?.error || "Something went wrong.");
-//     }
-//   };
-
-//   return (
-//     <Container className="d-flex align-items-center justify-content-center min-vh-100 position-relative">
-//       {/* Background Video */}
-//       <VideoBackground autoPlay loop muted>
-//         <source src={backgroundVideo} type="video/mp4" />
-//       </VideoBackground>
-
-//       {/* Animated Sun and Grains */}
-//       <Sun className="sun" />
-//       {[...Array(10)].map((_, i) => (
-//         <Grain key={i} className="grain" style={{ top: `${Math.random() * 80 + 10}%`, left: `${Math.random() * 90}%` }} />
-//       ))}
-
-//       <Row className="w-100 justify-content-center">
-//         <Col md={10} lg={8}>
-//           <Card className="p-4 shadow-lg bg-secondary text-white rounded" data-aos="fade-up">
-//             <Row>
-//               <Col md={6} className="d-flex align-items-center justify-content-center">
-//                 <motion.img
-//                   src={cropGif}
-//                   alt="Growing Crops"
-//                   className="img-fluid"
-//                   initial={{ opacity: 0, scale: 0.8 }}
-//                   animate={{ opacity: 1, scale: 1 }}
-//                   transition={{ duration: 1.5 }}
-//                 />
-//               </Col>
-//               <Col md={6}>
-//                 <motion.h2 
-//                   className="text-center mb-4 fw-bold"
-//                   initial={{ opacity: 0 }}
-//                   animate={{ opacity: 1 }}
-//                   transition={{ duration: 1 }}
-//                 >
-//                   Enter Crop Details
-//                 </motion.h2>
-
-//                 {error && <Alert variant="danger">{error}</Alert>}
-
-//                 <Form onSubmit={handleSubmit}>
-//                   <Form.Group className="mb-3">
-//                     <Form.Label className="fw-bold">Crop Type</Form.Label>
-//                     <Form.Control type="text" name="cropType" placeholder="Enter crop type" value={form.cropType} onChange={handleChange} required />
-//                   </Form.Group>
-//                   <Form.Group className="mb-3">
-//                     <Form.Label className="fw-bold">Crop Days</Form.Label>
-//                     <Form.Control type="number" name="cropDays" placeholder="Enter Crop days" value={form.cropDays} onChange={handleChange} required />
-//                   </Form.Group>
-//                   <Form.Group className="mb-3">
-//                     <Form.Label className="fw-bold">Location</Form.Label>
-//                     <Form.Control type="text" name="area" placeholder="Enter location" value={form.area} onChange={handleChange} required />
-//                   </Form.Group>
-
-//                   <motion.div whileHover={{ scale: 1.05 }}>
-//                     <Button type="submit" className="w-100 fw-bold p-2">
-//                       Save Details
-//                     </Button>
-//                   </motion.div>
-//                 </Form>
-
-//                 {report && !report.irrigationRequired && (
-//                   <motion.div 
-//                     className="mt-4 p-3 bg-dark rounded text-center"
-//                     initial={{ opacity: 0 }}
-//                     animate={{ opacity: 1 }}
-//                     transition={{ duration: 1 }}
-//                   >
-//                     <h3>No Irrigation Required</h3>
-//                     <p>Temperature: {report.temperature}°C</p>
-//                     <p>Humidity: {report.humidity}%</p>
-//                     <h4>💡 Gemini Insights</h4>
-//                     <p style={{ whiteSpace: "pre-wrap" }}>{report.explanation}</p>
-//                   </motion.div>
-//                 )}
-//               </Col>
-//             </Row>
-//           </Card>
-//         </Col>
-//       </Row>
-//     </Container>
-//   );
-// };
-
-// export default CropData;
-
-
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Form, Button, Container, Alert, Card, Row, Col } from "react-bootstrap";
 import { motion } from "framer-motion";
-import anime from "animejs";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import styled from "styled-components";
 import cropGif from "../assets/Gardening.gif";
 import backgroundVideo from "../assets/background_vid.mp4";
+import loadingGif from "../assets/plant_loading_gif.gif";
+import Logo from "../assets/Logo.svg";
 import { useNavigate } from "react-router-dom";
-
-// Styled Components
-const VideoBackground = styled.video`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  object-fit: cover;
-  opacity: 0.4;
-  z-index: -1;
-`;
-
-const Sun = styled.div`
-  position: absolute;
-  top: 10%;
-  left: 75%;
-  width: 100px;
-  height: 100px;
-  background: radial-gradient(circle, yellow 30%, orange 70%);
-  border-radius: 50%;
-  box-shadow: 0px 0px 50px rgba(255, 223, 0, 0.8);
-`;
-
-const Grain = styled.div`
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  background: wheat;
-  border-radius: 50%;
-  opacity: 0.8;
-`;
+import { FaInstagramSquare, FaLinkedin, FaGithub } from "react-icons/fa";
 
 const CropData = () => {
   const [form, setForm] = useState({ cropType: "", cropDays: "", area: "" });
   const [report, setReport] = useState(null);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     AOS.init({ duration: 1000 });
-
-    anime({
-      targets: ".sun",
-      translateY: [-10, 10],
-      direction: "alternate",
-      loop: true,
-      easing: "easeInOutSine",
-      duration: 4000,
-    });
-
-    anime({
-      targets: ".grain",
-      translateY: [-30, 0],
-      translateX: [-10, 10],
-      direction: "alternate",
-      loop: true,
-      easing: "easeInOutQuad",
-      duration: 5000,
-      delay: anime.stagger(200),
-    });
   }, []);
 
   const handleChange = (e) => {
@@ -661,125 +30,226 @@ const CropData = () => {
     const userId = localStorage.getItem("userId");
     if (!userId) return setError("Login required");
 
+    setLoading(true);
+
     try {
       const { data } = await axios.post("http://localhost:5000/api/crop/save", { ...form, userId });
       setReport(data);
       localStorage.setItem("explanation", data.explanation);
+
       if (data.irrigationRequired) {
         localStorage.setItem("cropType", data.cropType);
         localStorage.setItem("temperature", data.temperature);
         localStorage.setItem("humidity", data.humidity);
         navigate("/water-flow");
+      } else {
+        setLoading(false);
       }
     } catch (err) {
+      setLoading(false);
       setError(err.response?.data?.error || "Error");
     }
   };
 
-  return (
-    <Container className="d-flex align-items-center justify-content-center min-vh-100 position-relative">
-      {/* Background Video */}
-      <VideoBackground autoPlay loop muted>
-        <source src={backgroundVideo} type="video/mp4" />
-      </VideoBackground>
+  if (loading) {
+    return (
+      <div className="fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-70 flex items-center justify-center z-50">
+        <img src={loadingGif} alt="Loading..." className="w-64 h-64" />
+      </div>
+    );
+  }
+  
 
-      {/* Sun and Grains */}
-      <Sun className="sun" />
+  return (
+    <div className="relative min-h-screen flex flex-col items-center justify-center px-4 py-10">
+      {/* ✅ Background Video */}
+      <video
+        autoPlay
+        loop
+        muted
+        className="absolute top-0 left-0 w-full h-full object-cover opacity-90 -z-10"
+      >
+        <source src={backgroundVideo} type="video/mp4" />
+      </video>
+
+      {/* ✅ Header with Extended Nav */}
+      <motion.header
+        className="w-full max-w-7xl mx-auto px-4 flex items-center justify-between mb-10 py-2"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <motion.div
+          className="flex items-center gap-2"
+          whileHover={{ scale: 1.05 }}
+          transition={{ type: "spring", stiffness: 400, damping: 10 }}
+        >
+          <img src={Logo} alt="Organic Farm Logo" width={80} height={100} className="object-contain" />
+          <span className="font-semibold text-white text-xl">Jal Sanvardhan</span>
+        </motion.div>
+        <div className="hidden md:flex items-center gap-6">
+          {["Home", "CropData", "WaterFlow", "Register", "Login", "Contact Us"].map((item, index) => (
+            <motion.div
+              key={item}
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: 0.1 * index }}
+            >
+              <a
+                href={`/${item === "Home" ? "" : item.toLowerCase().replace(/\s+/g, "-")}`}
+                className="text-white hover:text-[#b7e4c7] font-medium relative group"
+              >
+                {item}
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#b7e4c7] transition-all group-hover:w-full duration-300"></span>
+              </a>
+            </motion.div>
+          ))}
+        </div>
+      </motion.header>
+
+      {/* ☀️ Sun + Grain Particles */}
+      <motion.div
+        className="absolute top-[10%] left-[75%] w-[100px] h-[100px] rounded-full z-10"
+        style={{
+          background: "radial-gradient(circle, yellow 30%, orange 70%)",
+          boxShadow: "0px 0px 50px rgba(255, 223, 0, 0.8)",
+        }}
+        animate={{ y: [0, 20, 0] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+      />
       {[...Array(10)].map((_, i) => (
-        <Grain key={i} className="grain" style={{ top: `${Math.random() * 80 + 10}%`, left: `${Math.random() * 90}%` }} />
+        <motion.div
+          key={i}
+          className="absolute w-[10px] h-[10px] bg-yellow-200 rounded-full opacity-80 z-10"
+          style={{
+            top: `${Math.random() * 80 + 10}%`,
+            left: `${Math.random() * 90}%`,
+          }}
+          animate={{ y: [0, -30, 0], x: [0, 10, -10, 0] }}
+          transition={{
+            duration: 5,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: i * 0.2,
+          }}
+        />
       ))}
 
-      <Row className="w-100 justify-content-center">
-        <Col md={10} lg={8}>
-          <Card className="p-4 shadow-lg bg-secondary text-white rounded" data-aos="fade-up">
-            <Row>
-              <Col md={6} className="d-flex align-items-center justify-content-center">
-                <motion.img
-                  src={cropGif}
-                  alt="Growing Crops"
-                  className="img-fluid"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 1.5 }}
-                />
-              </Col>
+      {/* ✅ Form + Animation Box */}
+      <div
+        className="grid grid-cols-1 md:grid-cols-2 bg-black/40 backdrop-blur-md rounded-2xl shadow-2xl p-8 gap-6 max-w-5xl w-full"
+        data-aos="fade-up"
+      >
+        <div className="relative bg-grey p-4 rounded-xl shadow-lg">
+          <motion.img
+            src={cropGif}
+            alt="Growing Crops"
+            className="w-full h-full object-contain rounded-xl"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.5 }}
+          />
+        </div>
 
-              <Col md={6}>
-                <motion.h2
-                  className="text-center mb-4 fw-bold"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 1 }}
-                >
-                  Enter Crop Details
-                </motion.h2>
+        <div className="flex flex-col justify-center text-white">
+          <motion.h2
+            className="text-3xl font-bold text-center mb-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+          >
+            🌱 Enter Crop Details
+          </motion.h2>
 
-                {error && <Alert variant="danger">{error}</Alert>}
+          {error && (
+            <p className="bg-red-100 text-red-800 px-4 py-2 rounded mb-4 text-sm font-medium">
+              {error}
+            </p>
+          )}
 
-                <Form onSubmit={handleSubmit}>
-                  <Form.Group className="mb-3">
-                    <Form.Label className="fw-bold">Crop Type</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="cropType"
-                      placeholder="Enter crop type"
-                      value={form.cropType}
-                      onChange={handleChange}
-                      required
-                    />
-                  </Form.Group>
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label className="block font-semibold mb-1">Crop Type</label>
+              <input
+                type="text"
+                name="cropType"
+                value={form.cropType}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-2 rounded-lg border border-gray-400 bg-white/80 text-black focus:outline-none focus:ring-2 focus:ring-green-400"
+                placeholder="e.g., Wheat, Rice"
+              />
+            </div>
 
-                  <Form.Group className="mb-3">
-                    <Form.Label className="fw-bold">Crop Days</Form.Label>
-                    <Form.Control
-                      type="number"
-                      name="cropDays"
-                      placeholder="Enter crop days"
-                      value={form.cropDays}
-                      onChange={handleChange}
-                      required
-                    />
-                  </Form.Group>
+            <div>
+              <label className="block font-semibold mb-1">Crop Days</label>
+              <input
+                type="number"
+                name="cropDays"
+                value={form.cropDays}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-2 rounded-lg border border-gray-400 bg-white/80 text-black focus:outline-none focus:ring-2 focus:ring-green-400"
+                placeholder="e.g., 120"
+              />
+            </div>
 
-                  <Form.Group className="mb-3">
-                    <Form.Label className="fw-bold">Location</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="area"
-                      placeholder="Enter location"
-                      value={form.area}
-                      onChange={handleChange}
-                      required
-                    />
-                  </Form.Group>
+            <div>
+              <label className="block font-semibold mb-1">Location</label>
+              <input
+                type="text"
+                name="area"
+                value={form.area}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-2 rounded-lg border border-gray-400 bg-white/80 text-black focus:outline-none focus:ring-2 focus:ring-green-400"
+                placeholder="e.g., Pune, Maharashtra"
+              />
+            </div>
 
-                  <motion.div whileHover={{ scale: 1.05 }}>
-                    <Button type="submit" className="w-100 fw-bold p-2">
-                      Submit
-                    </Button>
-                  </motion.div>
-                </Form>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              type="submit"
+              className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 rounded-lg shadow-lg transition"
+            >
+              🚀 Submit
+            </motion.button>
+          </form>
 
-                {report && !report.irrigationRequired && (
-                  <motion.div
-                    className="mt-4 p-3 bg-dark rounded text-center"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 1 }}
-                  >
-                    <h3>No Irrigation Required</h3>
-                    <p>Temperature: {report.temperature}°C</p>
-                    <p>Humidity: {report.humidity}%</p>
-                    <h4>💡 Gemini Insights</h4>
-                    <p style={{ whiteSpace: "pre-wrap" }}>{report.explanation}</p>
-                  </motion.div>
-                )}
-              </Col>
-            </Row>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
+          {report && !report.irrigationRequired && (
+            <motion.div
+              className="mt-6 bg-black/30 p-4 rounded-xl text-white shadow backdrop-blur"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1 }}
+            >
+              <h3 className="text-xl font-semibold mb-2">✅ No Irrigation Required</h3>
+              <p>🌡️ Temperature: {report.temperature}°C</p>
+              <p>💧 Humidity: {report.humidity}%</p>
+              <h4 className="mt-3 font-bold">💡 Gemini Insights:</h4>
+              <p className="whitespace-pre-wrap">{report.explanation}</p>
+            </motion.div>
+          )}
+        </div>
+      </div>
+
+      {/* ✅ Footer */}
+      <footer className="mt-20 pt-8 pb-4 border-t border-[#333] text-center text-sm text-white flex flex-col gap-4 items-center z-20 relative">
+        <div className="flex gap-4">
+          <a href="https://www.instagram.com/clavenncoutinho/" target="_blank" rel="noopener noreferrer">
+            <FaInstagramSquare className="w-6 h-6 text-white hover:scale-110 transition-transform" />
+          </a>
+          <a href="https://www.linkedin.com/in/claven-coutinho/" target="_blank" rel="noopener noreferrer">
+            <FaLinkedin className="w-6 h-6 text-white hover:scale-110 transition-transform" />
+          </a>
+          <a href="https://github.com/saparya04/JalSanvardhn-The-Smart-Irrigation-system-" target="_blank" rel="noopener noreferrer">
+            <FaGithub className="w-6 h-6 text-white hover:scale-110 transition-transform" />
+          </a>
+        </div>
+        <div>Contact us: support@jalsanvardhan.com | ‪+91-9967304451‬</div>
+        <div>© {new Date().getFullYear()} Jal Sanvardhan. All rights reserved.</div>
+      </footer>
+    </div>
   );
 };
 
