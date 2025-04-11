@@ -517,6 +517,226 @@
 // export default Register;
 
 
+// import React, { useState } from "react";
+// import {
+//   Form,
+//   Button,
+//   Container,
+//   Row,
+//   Col,
+//   Card,
+//   Navbar,
+//   Nav,
+// } from "react-bootstrap";
+// import { useNavigate } from "react-router-dom";
+// import logo from "../assets/LOGO.svg";
+// import bg from "../assets/bg image.jpg";
+
+// const styles = {
+//   page: {
+//     minHeight: "100vh",
+//     backgroundImage: `url(${bg})`,
+//     backgroundSize: "cover",
+//     backgroundPosition: "center",
+//     display: "flex",
+//     flexDirection: "column",
+//   },
+//   navbar: {
+//     backgroundColor: "rgba(0, 0, 0, 0.6)",
+//     padding: "0px 0",
+//   },
+//   brandName: {
+//     fontSize: "1.3rem",
+//     fontWeight: 600,
+//     color: "white",
+//   },
+//   navLink: {
+//     color: "white",
+//     marginLeft: "1rem",
+//     fontWeight: 500,
+//   },
+//   registerContainer: {
+//     flexGrow: 1,
+//     padding: "60px 15px",
+//     display: "flex",
+//     alignItems: "center",
+//     justifyContent: "center",
+//   },
+//   registerCard: {
+//     background: "rgba(255, 255, 255, 0.15)",
+//     backdropFilter: "blur(15px)",
+//     borderRadius: "20px",
+//     padding: "30px",
+//     color: "#fff",
+//     maxWidth: "400px",
+//     width: "100%",
+//     border: "1px solid rgba(255, 255, 255, 0.3)",
+//     boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
+//   },
+//   label: {
+//     color: "#e6e6e6",
+//   },
+//   input: {
+//     backgroundColor: "rgba(255, 255, 255, 0.85)",
+//     border: "none",
+//     borderRadius: "10px",
+//   },
+//   footer: {
+//     backgroundColor: "rgba(0, 0, 0, 0.6)",
+//     fontSize: "0.9rem",
+//     color: "white",
+//     textAlign: "center",
+//     padding: "15px 0",
+//     marginTop: "auto",
+//   },
+// };
+
+// const Register = () => {
+//   const navigate = useNavigate();
+//   const [form, setForm] = useState({
+//     name: "",
+//     email: "",
+//     password: "",
+//     confirmPassword: "",
+//   });
+
+//   const handleChange = (e) => {
+//     setForm({ ...form, [e.target.name]: e.target.value });
+//   };
+
+//   const handleSubmit = (e) => {
+//     e.preventDefault();
+
+//     // Dummy logic: Check if user is already registered
+//     if (form.email === "test@example.com") {
+//       alert("You are already registered. Please login.");
+//       navigate("/login");
+//     } else if (form.password !== form.confirmPassword) {
+//       alert("Passwords do not match!");
+//     } else {
+//       alert("Registration successful! Please login.");
+//       navigate("/login");
+//     }
+//   };
+
+//   return (
+//     <div style={styles.page}>
+//       {/* Header */}
+//       <Navbar expand="lg" style={styles.navbar}>
+//         <Container>
+//           <Navbar.Brand href="/" className="d-flex align-items-center gap-2">
+//             <img src={logo} alt="Logo" height="40" />
+//             <span style={styles.brandName}>Jal Sanvardhan</span>
+//           </Navbar.Brand>
+//           <Navbar.Toggle aria-controls="basic-navbar-nav" className="bg-light" />
+//           <Navbar.Collapse id="basic-navbar-nav">
+//             <Nav className="ms-auto">
+//               {["/home", "/crop-data", "/water-flow", "/register", "/login", "/contact"].map((path, index) => (
+//                 <Nav.Link
+//                   key={index}
+//                   href={path}
+//                   style={{
+//                     ...styles.navLink,
+//                     fontWeight: path === "/register" ? "bold" : "500",
+//                     textDecoration: path === "/register" ? "underline" : "none",
+//                   }}
+//                 >
+//                   {["Home", "CropData", "WaterFlow", "Register", "Login", "Contact Us"][index]}
+//                 </Nav.Link>
+//               ))}
+//             </Nav>
+//           </Navbar.Collapse>
+//         </Container>
+//       </Navbar>
+
+//       {/* Register Form Section */}
+//       <div style={styles.registerContainer}>
+//         <Row>
+//           <Col>
+//             <Card style={styles.registerCard}>
+//               <Card.Body>
+//                 <h2 className="text-center mb-4">Create an Account 🌱</h2>
+//                 <Form onSubmit={handleSubmit}>
+//                   <Form.Group className="mb-3" controlId="formName">
+//                     <Form.Label style={styles.label}>Name</Form.Label>
+//                     <Form.Control
+//                       type="text"
+//                       placeholder="Enter your name"
+//                       name="name"
+//                       value={form.name}
+//                       onChange={handleChange}
+//                       style={styles.input}
+//                       required
+//                     />
+//                   </Form.Group>
+
+//                   <Form.Group className="mb-3" controlId="formEmail">
+//                     <Form.Label style={styles.label}>Email address</Form.Label>
+//                     <Form.Control
+//                       type="email"
+//                       placeholder="Enter email"
+//                       name="email"
+//                       value={form.email}
+//                       onChange={handleChange}
+//                       style={styles.input}
+//                       required
+//                     />
+//                   </Form.Group>
+
+//                   <Form.Group className="mb-3" controlId="formPassword">
+//                     <Form.Label style={styles.label}>Password</Form.Label>
+//                     <Form.Control
+//                       type="password"
+//                       placeholder="Password"
+//                       name="password"
+//                       value={form.password}
+//                       onChange={handleChange}
+//                       style={styles.input}
+//                       required
+//                     />
+//                   </Form.Group>
+
+//                   <Form.Group className="mb-4" controlId="formConfirmPassword">
+//                     <Form.Label style={styles.label}>Confirm Password</Form.Label>
+//                     <Form.Control
+//                       type="password"
+//                       placeholder="Confirm Password"
+//                       name="confirmPassword"
+//                       value={form.confirmPassword}
+//                       onChange={handleChange}
+//                       style={styles.input}
+//                       required
+//                     />
+//                   </Form.Group>
+
+//                   <Button variant="success" type="submit" className="w-100">
+//                     Register
+//                   </Button>
+//                 </Form>
+//                 <div className="text-center mt-3">
+//                   Already have an account?{" "}
+//                   <a href="/login" className="text-white text-decoration-underline">Login here</a>
+//                 </div>
+//               </Card.Body>
+//             </Card>
+//           </Col>
+//         </Row>
+//       </div>
+
+//       {/* Footer */}
+//       <footer style={styles.footer}>
+//         <Container>
+//           <div>Contact us: support@jalsanvardhan.com | +91-9967304451</div>
+//           <div>© {new Date().getFullYear()} Jal Sanvardhan. All rights reserved.</div>
+//         </Container>
+//       </footer>
+//     </div>
+//   );
+// };
+
+// export default Register;
+
+// 👇 Only logic changes applied, UI untouched
 import React, { useState } from "react";
 import {
   Form,
@@ -527,8 +747,12 @@ import {
   Card,
   Navbar,
   Nav,
+  Alert,
+  InputGroup,
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import logo from "../assets/LOGO.svg";
 import bg from "../assets/bg image.jpg";
 
@@ -543,7 +767,8 @@ const styles = {
   },
   navbar: {
     backgroundColor: "rgba(0, 0, 0, 0.6)",
-    padding: "1rem 0",
+    padding: "0px 0",
+    height: "30px",
   },
   brandName: {
     fontSize: "1.3rem",
@@ -599,39 +824,43 @@ const Register = () => {
     password: "",
     confirmPassword: "",
   });
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
+    setLoading(true);
 
-    // Dummy logic: Check if user is already registered
-    if (form.email === "test@example.com") {
-      alert("You are already registered. Please login.");
+    try {
+      await axios.post("http://localhost:5000/api/auth/register", form);
+      alert("Registration successful!");
       navigate("/login");
-    } else if (form.password !== form.confirmPassword) {
-      alert("Passwords do not match!");
-    } else {
-      alert("Registration successful! Please login.");
-      navigate("/login");
+    } catch (err) {
+      setError(err.response?.data?.error || "Unexpected error occurred.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div style={styles.page}>
-      {/* Header */}
       <Navbar expand="lg" style={styles.navbar}>
         <Container>
           <Navbar.Brand href="/" className="d-flex align-items-center gap-2">
-            <img src={logo} alt="Logo" height="40" />
+            <img src={logo} alt="Logo" style={{ height: "40px", marginRight: "10px" }}  />
             <span style={styles.brandName}>Jal Sanvardhan</span>
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" className="bg-light" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
-              {["/", "/cropdata", "/waterflow", "/register", "/login", "/contact"].map((path, index) => (
+              {["/home", "/crop-data", "/water-flow", "/register", "/login", "/contact"].map((path, index) => (
                 <Nav.Link
                   key={index}
                   href={path}
@@ -649,13 +878,19 @@ const Register = () => {
         </Container>
       </Navbar>
 
-      {/* Register Form Section */}
       <div style={styles.registerContainer}>
         <Row>
           <Col>
             <Card style={styles.registerCard}>
               <Card.Body>
                 <h2 className="text-center mb-4">Create an Account 🌱</h2>
+
+                {error && (
+                  <Alert variant="danger" className="text-center">
+                    {error}
+                  </Alert>
+                )}
+
                 <Form onSubmit={handleSubmit}>
                   <Form.Group className="mb-3" controlId="formName">
                     <Form.Label style={styles.label}>Name</Form.Label>
@@ -685,37 +920,56 @@ const Register = () => {
 
                   <Form.Group className="mb-3" controlId="formPassword">
                     <Form.Label style={styles.label}>Password</Form.Label>
-                    <Form.Control
-                      type="password"
-                      placeholder="Password"
-                      name="password"
-                      value={form.password}
-                      onChange={handleChange}
-                      style={styles.input}
-                      required
-                    />
+                    <InputGroup>
+                      <Form.Control
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Password"
+                        name="password"
+                        value={form.password}
+                        onChange={handleChange}
+                        style={styles.input}
+                        required
+                      />
+                      <Button
+                        variant="outline-secondary"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                      </Button>
+                    </InputGroup>
                   </Form.Group>
 
                   <Form.Group className="mb-4" controlId="formConfirmPassword">
                     <Form.Label style={styles.label}>Confirm Password</Form.Label>
-                    <Form.Control
-                      type="password"
-                      placeholder="Confirm Password"
-                      name="confirmPassword"
-                      value={form.confirmPassword}
-                      onChange={handleChange}
-                      style={styles.input}
-                      required
-                    />
+                    <InputGroup>
+                      <Form.Control
+                        type={showConfirmPassword ? "text" : "password"}
+                        placeholder="Confirm Password"
+                        name="confirmPassword"
+                        value={form.confirmPassword}
+                        onChange={handleChange}
+                        style={styles.input}
+                        required
+                      />
+                      <Button
+                        variant="outline-secondary"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      >
+                        {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                      </Button>
+                    </InputGroup>
                   </Form.Group>
 
-                  <Button variant="success" type="submit" className="w-100">
-                    Register
+                  <Button variant="success" type="submit" className="w-100" disabled={loading}>
+                    {loading ? "Registering..." : "Register"}
                   </Button>
                 </Form>
+
                 <div className="text-center mt-3">
                   Already have an account?{" "}
-                  <a href="/login" className="text-white text-decoration-underline">Login here</a>
+                  <a href="/login" className="text-white text-decoration-underline">
+                    Login here
+                  </a>
                 </div>
               </Card.Body>
             </Card>
@@ -723,7 +977,6 @@ const Register = () => {
         </Row>
       </div>
 
-      {/* Footer */}
       <footer style={styles.footer}>
         <Container>
           <div>Contact us: support@jalsanvardhan.com | +91-9967304451</div>

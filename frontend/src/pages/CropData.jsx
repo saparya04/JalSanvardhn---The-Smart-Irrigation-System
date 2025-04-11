@@ -34,6 +34,7 @@ const CropData = () => {
 
     try {
       const { data } = await axios.post("http://localhost:5000/api/crop/save", { ...form, userId });
+      // localStorage.setItem("userId", data.user._id);
       setReport(data);
       localStorage.setItem("explanation", data.explanation);
 
@@ -88,7 +89,7 @@ const CropData = () => {
           <span className="font-semibold text-white text-xl">Jal Sanvardhan</span>
         </motion.div>
         <div className="hidden md:flex items-center gap-6">
-          {["Home", "CropData", "WaterFlow", "Register", "Login", "Contact Us"].map((item, index) => (
+          {["home", "crop-data", "water-flow", "register", "login", "Contact Us"].map((item, index) => (
             <motion.div
               key={item}
               initial={{ opacity: 0, y: -20 }}
@@ -140,7 +141,7 @@ const CropData = () => {
         className="grid grid-cols-1 md:grid-cols-2 bg-black/40 backdrop-blur-md rounded-2xl shadow-2xl p-8 gap-6 max-w-5xl w-full"
         data-aos="fade-up"
       >
-        <div className="relative bg-grey p-4 rounded-xl shadow-lg">
+        <div className="relative bg-grey p-4 rounded-xl shadow-lg self-start">
           <motion.img
             src={cropGif}
             alt="Growing Crops"
@@ -173,6 +174,7 @@ const CropData = () => {
               <input
                 type="text"
                 name="cropType"
+                
                 value={form.cropType}
                 onChange={handleChange}
                 required
@@ -203,7 +205,7 @@ const CropData = () => {
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-2 rounded-lg border border-gray-400 bg-white/80 text-black focus:outline-none focus:ring-2 focus:ring-green-400"
-                placeholder="e.g., Pune, Maharashtra"
+                placeholder="e.g., Pune, Mumbai"
               />
             </div>
 

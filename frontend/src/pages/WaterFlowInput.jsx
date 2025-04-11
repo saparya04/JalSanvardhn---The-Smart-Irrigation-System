@@ -829,7 +829,7 @@ const WaterFlowInput = () => {
           <span className="font-semibold text-white text-xl">Jal Sanvardhan</span>
         </motion.div>
         <div className="hidden md:flex items-center gap-6">
-          {["Home", "CropData", "WaterFlow", "Register", "Login", "Contact Us"].map((item, index) => (
+          {["home", "crop-Data", "water-flow", "register", "login", "Contact Us"].map((item, index) => (
             <motion.div
               key={item}
               initial={{ opacity: 0, y: -20 }}

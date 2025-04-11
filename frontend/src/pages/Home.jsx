@@ -57,7 +57,7 @@ export default function Home() {
             <span className="font-semibold text-white text-xl">Jal Sanvardhan</span>
           </motion.div>
           <div className="hidden md:flex items-center gap-6">
-            {["Home", "CropData", "WaterFlow", "Register", "Login", "Contact Us"].map((item, index) => (
+            {["home", "crop-data", "water-flow", "register", "login", "Contact Us"].map((item, index) => (
               <motion.div
                 key={item}
                 initial={{ opacity: 0, y: -20 }}
@@ -65,7 +65,9 @@ export default function Home() {
                 transition={{ duration: 0.3, delay: 0.1 * index }}
               >
                 <a
-                  href={`/${item === "Home" ? "" : item.toLowerCase().replace(/\s+/g, "-")}`}
+                  //href={`/${item === "Home" ? "" : item.toLowerCase().replace(/\s+/g, "-")}`}
+                  href={item === "Contact Us" ? "#contact-us" : `/${item === "Home" ? "" : item.toLowerCase().replace(/\s+/g, "-")}`}
+
                   className="text-white hover:text-[#b7e4c7] font-medium relative group"
                 >
                   {item}
@@ -258,7 +260,8 @@ export default function Home() {
         </div>
 
         {/* ✅ Footer Section */}
-        <footer className="mt-20 pt-8 pb-4 border-t border-[#333] text-center text-sm text-white flex flex-col gap-4 items-center">
+        
+        <footer id="contact-us" className="mt-20 pt-8 pb-4 border-t border-[#333] text-center text-sm text-white flex flex-col gap-4 items-center">
           <div className="flex gap-4">
             <a href="https://www.instagram.com/clavenncoutinho/" target="_blank" rel="noopener noreferrer">
               <FaInstagramSquare className="w-6 h-6 text-white hover:scale-110 transition-transform" />
