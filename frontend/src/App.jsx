@@ -4,6 +4,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login.jsx";
 import CropData from "./pages/CropData";
 import WaterFlowInput from "./pages/WaterFlowInput";
+import PicData from "./pages/PicData";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import './App.css'
@@ -21,7 +22,8 @@ function App() {
         <Route path="/crop-data" element={<CropData />} />
         <Route path="/water-flow" element={<WaterFlowInput />} />
         <Route path="/home" element={<Home />} />
-        <Route path='/Claven' element={<Claven />} />
+        <Route path="/pic-data" element={<PicData />} />
+        {/* <Route path='/Claven' element={<Claven />} /> */}
       </Routes>
     </Router>
   );

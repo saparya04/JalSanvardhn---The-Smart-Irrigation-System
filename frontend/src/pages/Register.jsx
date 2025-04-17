@@ -736,7 +736,7 @@
 
 // export default Register;
 
-// 👇 Only logic changes applied, UI untouched
+
 import React, { useState } from "react";
 import {
   Form,
@@ -860,7 +860,7 @@ const Register = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" className="bg-light" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
-              {["/home", "/crop-data", "/water-flow", "/register", "/login", "/contact"].map((path, index) => (
+              {["/home", "/crop-data","/pic-data", "/water-flow", "/register", "/login", "/contact"].map((path, index) => (
                 <Nav.Link
                   key={index}
                   href={path}
@@ -870,7 +870,8 @@ const Register = () => {
                     textDecoration: path === "/register" ? "underline" : "none",
                   }}
                 >
-                  {["Home", "CropData", "WaterFlow", "Register", "Login", "Contact Us"][index]}
+                  
+                  {["Home", "CropData","Upload-Image", "WaterFlow", "Register", "Login", "Contact Us"][index]}
                 </Nav.Link>
               ))}
             </Nav>
