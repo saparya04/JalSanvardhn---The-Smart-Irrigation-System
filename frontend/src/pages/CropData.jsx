@@ -9,7 +9,7 @@ import loadingGif from "../assets/plant_loading_gif.gif";
 import Logo from "../assets/Logo.svg";
 import { useNavigate } from "react-router-dom";
 import { FaInstagramSquare, FaLinkedin, FaGithub } from "react-icons/fa";
-
+//done
 const CropData = () => {
   const [form, setForm] = useState({ cropType: "", cropDays: "", area: "" });
   const [report, setReport] = useState(null);
