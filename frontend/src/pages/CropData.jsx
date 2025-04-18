@@ -9,9 +9,14 @@ import loadingGif from "../assets/plant_loading_gif.gif";
 import Logo from "../assets/Logo.svg";
 import { useNavigate } from "react-router-dom";
 import { FaInstagramSquare, FaLinkedin, FaGithub } from "react-icons/fa";
-
+import { Country, State, City } from "country-state-city";
 const CropData = () => {
   const [form, setForm] = useState({ cropType: "", cropDays: "", area: "" });
+  const [location, setLocation] = useState({
+    country: "IN", // ✅ Default country as India
+    state: "",
+    city: "",
+  });
   const [report, setReport] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -20,20 +25,37 @@ const CropData = () => {
   useEffect(() => {
     AOS.init({ duration: 1000 });
   }, []);
+  const countries = Country.getAllCountries();
+  const states = location.country ? State.getStatesOfCountry(location.country) : [];
+  const cities = location.state ? City.getCitiesOfState(location.country, location.state) : [];
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
+
+  const handleLocationChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "country") {
+      setLocation({ country: value, state: "", city: "" });
+    } else if (name === "state") {
+      setLocation((prev) => ({ ...prev, state: value, city: "" }));
+    } else {
+      setLocation((prev) => ({ ...prev, [name]: value }));
+    }
+  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const userId = localStorage.getItem("userId");
     if (!userId) return setError("Login required");
 
+
+    const fullLocation = `${location.city}, ${location.state}, ${location.country}`;
     setLoading(true);
 
     try {
-      const { data } = await axios.post("https://jalsanvardhn-backend.onrender.com/api/crop/save", { ...form, userId });
+      const { data } = await axios.post("https://jalsanvardhn-backend.onrender.com/api/crop/save", { ...form, area: fullLocation, userId });
       // localStorage.setItem("userId", data.user._id);
       setReport(data);
       localStorage.setItem("explanation", data.explanation);
