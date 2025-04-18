@@ -761,6 +761,7 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import { FaInstagramSquare, FaLinkedin, FaGithub } from "react-icons/fa";
 import bgVideo from "../assets/background_vid.mp4";
+import image from "../assets/Logo.svg";
 
 const WaterFlowInput = () => {
   const [form, setForm] = useState({
@@ -825,7 +826,7 @@ const WaterFlowInput = () => {
           whileHover={{ scale: 1.05 }}
           transition={{ type: "spring", stiffness: 400, damping: 10 }}
         >
-          <img src="../src/assets/Logo.svg" alt="Organic Farm Logo" width={80} height={100} className="object-contain" />
+          <img src={image} alt="Organic Farm Logo" width={80} height={100} className="object-contain" />
           <span className="font-semibold text-white text-xl">Jal Sanvardhan</span>
         </motion.div>
         <div className="hidden md:flex items-center gap-6">

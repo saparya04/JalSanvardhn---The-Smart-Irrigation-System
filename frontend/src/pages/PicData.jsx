@@ -114,6 +114,16 @@ const PicData = () => {
       setLoading(false);
     }
   };
+  const downloadTextFile = () => {
+    if (!result) return;
+
+    const textContent = `Disease Prediction Result:\n\nDisease: ${result.disease}\n\nSuggestions:\n${result.suggestions || "No suggestions available"}`;
+    const blob = new Blob([textContent], { type: "text/plain" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "prediction_result.txt";
+    link.click();
+  };
 
   return (
     <div className="position-relative min-vh-100 d-flex flex-column text-white">
@@ -234,23 +244,82 @@ const PicData = () => {
 
               {/* ✅ Gemini Result Display */}
               {result && (
-                <motion.div
-                  className="mt-4 bg-light text-dark p-4 rounded-4"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.7 }}
-                >
-                  <h4 className="mb-2">🌾 Prediction Result</h4>
-                  <p><strong>Disease:</strong> <span className="text-danger">{result.disease}</span></p>
-                  <hr />
-                  <h5 className="mb-2 text-success">🌟 Gemini Suggestions</h5>
-                  <ul className="text-start">
-                    {result.suggestions?.split("\n").map((line, index) => (
-                      <li key={index}>{line}</li>
-                    ))}
-                  </ul>
-                </motion.div>
-              )}
+  <motion.div
+    className="mt-5 p-4 rounded-4 shadow-lg"
+    style={{
+      background: "linear-gradient(145deg, #f0fff4, #e6f9ec)",
+      border: "1px solid #c3e6cb",
+    }}
+    initial={{ opacity: 0, y: 30 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.8 }}
+  >
+    {/* 🎯 Prediction Summary */}
+    <motion.h4
+      className="text-center fw-bold mb-4"
+      style={{ color: "#155724", fontSize: "1.8rem" }}
+      initial={{ scale: 0.9 }}
+      animate={{ scale: 1 }}
+      transition={{ delay: 0.2 }}
+    >
+      Disease Prediction Result:
+    </motion.h4>
+
+    <div className="text-center mb-4">
+      <motion.p
+        style={{ fontSize: "1.5rem", fontWeight: "600", color: "#c82333" }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.4 }}
+      >
+        <span className="me-2">🦠</span> {result.disease}
+      </motion.p>
+    </div>
+
+    {/* 🌱 Gemini Suggestions */}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+    >
+      <h5
+        className="fw-bold mb-3 text-center"
+        style={{ color: "#218838", fontSize: "1.3rem" }}
+      >
+        🌿 Personalized Care & Irrigation Advice
+      </h5>
+
+      <div
+        className="p-3 rounded"
+        style={{
+          backgroundColor: "rgba(255, 255, 255, 0.9)",
+          fontSize: "1rem",
+          lineHeight: "1.8",
+          color: "#212529",
+          maxHeight: "300px",
+          overflowY: "auto",
+        }}
+      >
+        {result.suggestions?.split("\n").map((line, index) =>
+          line.trim() !== "" ? (
+            <motion.div
+              key={index}
+              className="d-flex align-items-start mb-2"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.05 * index }}
+            >
+              <span className="me-2">🔹</span>
+              <span>{line.trim()}</span>
+            </motion.div>
+          ) : null
+        )}
+      </div>
+    </motion.div>
+  </motion.div>
+)}
+
+
             </motion.div>
           </Col>
         </Row>

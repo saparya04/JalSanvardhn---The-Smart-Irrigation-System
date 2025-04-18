@@ -9,7 +9,11 @@ import { FaLinkedin } from "react-icons/fa6";
 import { FaInstagramSquare } from "react-icons/fa";
 import { FaGithub } from "react-icons/fa6";
 import BubbleBackground from "../components/ui/BubbleBackground";
-
+import img from "../assets/Logo.svg";
+import sap from "../assets/backg.jpg";
+import bas from "../assets/backg3.jpg";
+import backg1 from "../assets/backg1.jpg";
+import backg2 from "../assets/backg2.jpg";
 export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -53,7 +57,7 @@ export default function Home() {
             whileHover={{ scale: 1.05 }}
             transition={{ type: "spring", stiffness: 400, damping: 10 }}
           >
-            <img src="../src/assets/Logo.svg" alt="Organic Farm Logo" width={80} height={100} className="object-contain" />
+            <img src={img} alt="Organic Farm Logo" width={80} height={100} className="object-contain" />
             <span className="font-semibold text-white text-xl">Jal Sanvardhan</span>
           </motion.div>
           <div className="hidden md:flex items-center gap-6">
@@ -113,7 +117,7 @@ export default function Home() {
               transition={{ duration: 0.3 }}
             >
               <img
-                src="../src/assets/backg.jpg"
+                src={sap}
                 alt="Farm Field"
                 className="w-full h-full object-cover rounded-3xl"
               />
@@ -125,13 +129,15 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 1.1 }}
             >
-              {["../src/assets/backg1.jpg", "../src/assets/backg2.jpg"].map((img, i) => (
-                <motion.div
-                  key={i}
-                  className="w-32 h-24 md:w-40 md:h-32 rounded-2xl overflow-hidden border-4 border-black relative"
-                  whileHover={{ scale: 1.1, rotate: i === 0 ? 2 : -2 }}
-                  transition={{ duration: 0.3 }}
-                >
+              const images = [backg1, backg2];
+
+                  {images.map((img, i) => (
+                    <motion.div
+                      key={i}
+                      className="w-32 h-24 md:w-40 md:h-32 rounded-2xl overflow-hidden border-4 border-black relative"
+                      whileHover={{ scale: 1.1, rotate: i === 0 ? 2 : -2 }}
+                      transition={{ duration: 0.3 }}
+                    >
                   <img
                     src={`/${img}`}
                     alt="Farm"
@@ -172,7 +178,7 @@ export default function Home() {
               whileHover={{ scale: 1.1, rotate: 5 }}
             >
               <img
-                src="../src/assets/backg3.jpg"
+                src={bas}
                 alt="Vegetables"
                 className="w-full h-full object-cover"
               />
