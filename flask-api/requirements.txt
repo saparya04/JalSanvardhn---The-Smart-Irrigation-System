@@ -8,3 +8,6 @@ flask-cors
 python-dotenv 
 opencv-python 
 tensorflow
+google-generativeai
+
+
