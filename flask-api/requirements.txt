@@ -5,3 +5,6 @@ scikit-learn
 gunicorn
 joblib
 flask-cors
+python-dotenv 
+opencv-python 
+tensorflow
