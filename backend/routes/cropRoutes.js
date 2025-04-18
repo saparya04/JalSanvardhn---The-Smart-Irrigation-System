@@ -305,7 +305,7 @@ router.post("/save", async (req, res) => {
     const weather = await getWeatherData(lat, lon);
     const soilMoisture = await getSoilMoisture(lat, lon);
 
-    const flaskResponse = await axios.post("http://127.0.0.1:5002/predict", {
+    const flaskResponse = await axios.post("https://jalsanvardhn-flask.onrender.com/predict", {
       cropType,
       cropDays,
       temperature: weather.temperature,

@@ -786,7 +786,7 @@ const WaterFlowInput = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://127.0.0.1:5002/water-flow", {
+      const response = await axios.post("https://jalsanvardhn-flask.onrender.com/water-flow", {
         ...form,
         cropType,
         temperatureRange: getTemperatureRange(temperature),
