@@ -399,7 +399,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { motion } from "framer-motion";
-import logo from "../assets/LOGO.svg";
+import logo from "../assets/Logo.svg";
 import bg from "../assets/bg image.jpg";
 import successBg from "../assets/farmbgg.png"; // 🆕 Add a dark/green themed bg
 
