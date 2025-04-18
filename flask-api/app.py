@@ -437,6 +437,9 @@ def predict_disease():
     except Exception as e:
         print("🔴 Error in /predict-disease:", e)
         return jsonify({"error": str(e)}), 500
+@app.route("/", methods=["GET"])
+def home():
+    return jsonify({"message": "JalSanvardhn Flask API is live 🚀"})
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5002)))
