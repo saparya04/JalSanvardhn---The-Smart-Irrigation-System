@@ -33,7 +33,7 @@ const CropData = () => {
     setLoading(true);
 
     try {
-      const { data } = await axios.post("http://localhost:5000/api/crop/save", { ...form, userId });
+      const { data } = await axios.post("https://jalsanvardhn-backend.onrender.com/api/crop/save", { ...form, userId });
       // localStorage.setItem("userId", data.user._id);
       setReport(data);
       localStorage.setItem("explanation", data.explanation);

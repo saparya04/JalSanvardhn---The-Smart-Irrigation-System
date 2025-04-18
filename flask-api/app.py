@@ -265,7 +265,10 @@ load_dotenv()
 
 # Initialize Flask app
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=[
+    "https://jalsanvardhn.onrender.com",
+    "https://jalsanvardhn-backend.onrender.com"
+])
 
 # Load models
 encoder = joblib.load("label_encoder.pkl")

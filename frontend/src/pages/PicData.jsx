@@ -99,7 +99,7 @@ const PicData = () => {
     formData.append("image", image);
 
     try {
-      const res = await fetch("http://localhost:5002/predict-disease", {
+      const res = await fetch("https://jalsanvardhn-flask.onrender.com/predict-disease", {
         method: "POST",
         body: formData,
       });
