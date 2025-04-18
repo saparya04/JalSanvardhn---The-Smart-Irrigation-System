@@ -14,10 +14,11 @@ import sap from "../assets/backg.jpg";
 import bas from "../assets/backg3.jpg";
 import backg1 from "../assets/backg1.jpg";
 import backg2 from "../assets/backg2.jpg";
+
 export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false);
-
   const words = ["smarter", "greener", "efficient", "automated", "productive", "sustainable"];
+  const images = [backg1, backg2];
 
   useEffect(() => {
     setIsLoaded(true);
@@ -44,8 +45,7 @@ export default function Home() {
       <BubbleBackground />
 
       <div className="relative z-10 container mx-auto p-4">
-
-        {/* ✅ Header with Extended Nav */}
+        {/* Header */}
         <motion.header
           className="flex items-center justify-between mb-8 py-2"
           initial={{ opacity: 0, y: -20 }}
@@ -69,9 +69,7 @@ export default function Home() {
                 transition={{ duration: 0.3, delay: 0.1 * index }}
               >
                 <a
-                  //href={`/${item === "Home" ? "" : item.toLowerCase().replace(/\s+/g, "-")}`}
                   href={item === "Contact Us" ? "#contact-us" : `/${item === "Home" ? "" : item.toLowerCase().replace(/\s+/g, "-")}`}
-
                   className="text-white hover:text-[#b7e4c7] font-medium relative group"
                 >
                   {item}
@@ -123,23 +121,22 @@ export default function Home() {
               />
             </motion.div>
 
+            {/* Mini Images with Effects */}
             <motion.div
               className="absolute bottom-4 right-4 md:bottom-8 md:right-8 flex gap-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 1.1 }}
             >
-              const images = [backg1, backg2];
-
-                  {images.map((img, i) => (
-                    <motion.div
-                      key={i}
-                      className="w-32 h-24 md:w-40 md:h-32 rounded-2xl overflow-hidden border-4 border-black relative"
-                      whileHover={{ scale: 1.1, rotate: i === 0 ? 2 : -2 }}
-                      transition={{ duration: 0.3 }}
-                    >
+              {images.map((img, i) => (
+                <motion.div
+                  key={i}
+                  className="w-32 h-24 md:w-40 md:h-32 rounded-2xl overflow-hidden border-4 border-black relative"
+                  whileHover={{ scale: 1.1, rotate: i === 0 ? 2 : -2 }}
+                  transition={{ duration: 0.3 }}
+                >
                   <img
-                    src={`/${img}`}
+                    src={img}
                     alt="Farm"
                     className="w-full h-full object-cover"
                   />
@@ -265,8 +262,7 @@ export default function Home() {
           />
         </div>
 
-        {/* ✅ Footer Section */}
-        
+        {/* Footer */}
         <footer id="contact-us" className="mt-20 pt-8 pb-4 border-t border-[#333] text-center text-sm text-white flex flex-col gap-4 items-center">
           <div className="flex gap-4">
             <a href="https://www.instagram.com/clavenncoutinho/" target="_blank" rel="noopener noreferrer">
@@ -282,7 +278,6 @@ export default function Home() {
           <div>Contact us: support@jalsanvardhan.com | +91-9967304451</div>
           <div>© {new Date().getFullYear()} Jal Sanvardhan. All rights reserved.</div>
         </footer>
-
       </div>
     </main>
   );
