@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion"; // <-- Added AnimatePresence
 import AOS from "aos";
 import "aos/dist/aos.css";
 import cropGif from "../assets/Gardening.gif";
@@ -9,9 +9,15 @@ import loadingGif from "../assets/plant_loading_gif.gif";
 import Logo from "../assets/Logo.svg";
 import { useNavigate } from "react-router-dom";
 import { FaInstagramSquare, FaLinkedin, FaGithub } from "react-icons/fa";
-//done
+import { Country, State, City } from "country-state-city";
+
 const CropData = () => {
   const [form, setForm] = useState({ cropType: "", cropDays: "", area: "" });
+  const [location, setLocation] = useState({
+    country: "IN", // ✅ Default country as India
+    state: "",
+    city: "",
+  });
   const [report, setReport] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -21,8 +27,23 @@ const CropData = () => {
     AOS.init({ duration: 1000 });
   }, []);
 
+  const countries = Country.getAllCountries();
+  const states = location.country ? State.getStatesOfCountry(location.country) : [];
+  const cities = location.state ? City.getCitiesOfState(location.country, location.state) : [];
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleLocationChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "country") {
+      setLocation({ country: value, state: "", city: "" });
+    } else if (name === "state") {
+      setLocation((prev) => ({ ...prev, state: value, city: "" }));
+    } else {
+      setLocation((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -30,11 +51,16 @@ const CropData = () => {
     const userId = localStorage.getItem("userId");
     if (!userId) return setError("Login required");
 
+    const fullLocation = `${location.city}, ${location.state}, ${location.country}`;
     setLoading(true);
 
     try {
-      const { data } = await axios.post("https://jalsanvardhn-backend.onrender.com/api/crop/save", { ...form, userId });
-      // localStorage.setItem("userId", data.user._id);
+      const { data } = await axios.post("https://jalsanvardhn-backend.onrender.com/api/crop/save", {
+        ...form,
+        area: fullLocation,
+        userId,
+      });
+
       setReport(data);
       localStorage.setItem("explanation", data.explanation);
 
@@ -59,11 +85,10 @@ const CropData = () => {
       </div>
     );
   }
-  
 
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center px-4 py-10">
-      {/* ✅ Background Video */}
+      {/* Background Video */}
       <video
         autoPlay
         loop
@@ -73,7 +98,7 @@ const CropData = () => {
         <source src={backgroundVideo} type="video/mp4" />
       </video>
 
-      {/* ✅ Header with Extended Nav */}
+      {/* Header */}
       <motion.header
         className="w-full max-w-7xl mx-auto px-4 flex items-center justify-between mb-10 py-2"
         initial={{ opacity: 0, y: -20 }}
@@ -85,7 +110,7 @@ const CropData = () => {
           whileHover={{ scale: 1.05 }}
           transition={{ type: "spring", stiffness: 400, damping: 10 }}
         >
-          <img src={Logo} alt="Organic Farm Logo" width={80} height={100} className="object-contain" />
+          <img src={Logo} alt="Logo" width={80} height={100} className="object-contain" />
           <span className="font-semibold text-white text-xl">Jal Sanvardhan</span>
         </motion.div>
         <div className="hidden md:flex items-center gap-6">
@@ -108,7 +133,7 @@ const CropData = () => {
         </div>
       </motion.header>
 
-      {/* ☀️ Sun + Grain Particles */}
+      {/* Sun particles etc. */}
       <motion.div
         className="absolute top-[10%] left-[75%] w-[100px] h-[100px] rounded-full z-10"
         style={{
@@ -136,7 +161,7 @@ const CropData = () => {
         />
       ))}
 
-      {/* ✅ Form + Animation Box */}
+      {/* Main Form */}
       <div
         className="grid grid-cols-1 md:grid-cols-2 bg-black/40 backdrop-blur-md rounded-2xl shadow-2xl p-8 gap-6 max-w-5xl w-full"
         data-aos="fade-up"
@@ -174,11 +199,10 @@ const CropData = () => {
               <input
                 type="text"
                 name="cropType"
-                
                 value={form.cropType}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 rounded-lg border border-gray-400 bg-white/80 text-black focus:outline-none focus:ring-2 focus:ring-green-400"
+                className="w-full px-4 py-2 rounded-lg border border-gray-400 bg-white/80 text-black"
                 placeholder="e.g., Wheat, Rice"
               />
             </div>
@@ -191,23 +215,83 @@ const CropData = () => {
                 value={form.cropDays}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 rounded-lg border border-gray-400 bg-white/80 text-black focus:outline-none focus:ring-2 focus:ring-green-400"
+                className="w-full px-4 py-2 rounded-lg border border-gray-400 bg-white/80 text-black"
                 placeholder="e.g., 120"
               />
             </div>
 
+            {/* Location fields */}
             <div>
-              <label className="block font-semibold mb-1">Location</label>
-              <input
-                type="text"
-                name="area"
-                value={form.area}
-                onChange={handleChange}
+              <label className="block font-semibold mb-1">Country</label>
+              <select
+                name="country"
+                value={location.country}
+                onChange={handleLocationChange}
                 required
-                className="w-full px-4 py-2 rounded-lg border border-gray-400 bg-white/80 text-black focus:outline-none focus:ring-2 focus:ring-green-400"
-                placeholder="e.g., Pune, Mumbai"
-              />
+                className="w-full px-4 py-2 rounded-lg border border-gray-400 bg-white text-black"
+              >
+                <option value="">Select Country</option>
+                {countries.map((c) => (
+                  <option key={c.isoCode} value={c.isoCode}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
             </div>
+
+            <AnimatePresence>
+              {location.country && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <label className="block font-semibold mb-1">State</label>
+                  <select
+                    name="state"
+                    value={location.state}
+                    onChange={handleLocationChange}
+                    required
+                    className="w-full px-4 py-2 rounded-lg border border-gray-400 bg-white text-black"
+                  >
+                    <option value="">Select State</option>
+                    {states.map((s) => (
+                      <option key={s.isoCode} value={s.isoCode}>
+                        {s.name}
+                      </option>
+                    ))}
+                  </select>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            <AnimatePresence>
+              {location.state && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <label className="block font-semibold mb-1">City / Region</label>
+                  <select
+                    name="city"
+                    value={location.city}
+                    onChange={handleLocationChange}
+                    required
+                    className="w-full px-4 py-2 rounded-lg border border-gray-400 bg-white text-black"
+                  >
+                    <option value="">Select City</option>
+                    {cities.map((city) => (
+                      <option key={city.name} value={city.name}>
+                        {city.name}
+                      </option>
+                    ))}
+                  </select>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -235,7 +319,7 @@ const CropData = () => {
         </div>
       </div>
 
-      {/* ✅ Footer */}
+      {/* Footer */}
       <footer className="mt-20 pt-8 pb-4 border-t border-[#333] text-center text-sm text-white flex flex-col gap-4 items-center z-20 relative">
         <div className="flex gap-4">
           <a href="https://www.instagram.com/clavenncoutinho/" target="_blank" rel="noopener noreferrer">
