@@ -11,7 +11,7 @@ import './App.css'
 import Home from './pages/Home.jsx';
 // import '../src/global.css';
 // import Layout from "./components/ui/layout.jsx";
-import Claven from './pages/Claven.jsx';
+
 
 function App() {
   return (
@@ -23,7 +23,7 @@ function App() {
         <Route path="/water-flow" element={<WaterFlowInput />} />
         <Route path="/home" element={<Home />} />
         <Route path="/pic-data" element={<PicData />} />
-        {/* <Route path='/Claven' element={<Claven />} /> */}
+        
       </Routes>
     </Router>
   );
