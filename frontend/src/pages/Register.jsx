@@ -753,7 +753,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import logo from "../assets/LOGO.svg";
+import logo from "../assets/Logo.svg";
 import bg from "../assets/bg image.jpg";
 
 const styles = {

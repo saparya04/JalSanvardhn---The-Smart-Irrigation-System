@@ -65,7 +65,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { useNavigate } from "react-router-dom";
 import backgroundVideo from "../assets/background_vid.mp4";
-import logo from "../assets/LOGO.svg";
+import logo from "../assets/Logo.svg";
 
 const PicData = () => {
   const [image, setImage] = useState(null);
