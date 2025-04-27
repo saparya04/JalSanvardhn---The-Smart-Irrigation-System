@@ -263,8 +263,8 @@ from werkzeug.utils import secure_filename
 load_dotenv()
 
 # Initialize Flask app
-application = Flask(__name__)  # Changed 'app' to 'application'
-CORS(application, origins=[
+app = Flask(__name__)  # Changed 'app' to 'application'
+CORS(app, origins=[
     "http://jalsanvardhn-frontend.s3-website.ap-south-1.amazonaws.com",
     "https://jalsanvardhn-backend.onrender.com"
 ])
@@ -317,7 +317,7 @@ def preprocess_image(file_path):
     img_array = tf.expand_dims(img_array, axis=0)
     return img_array
 
-@application.route("/predict", methods=["POST"])
+@app.route("/predict", methods=["POST"])
 def predict_irrigation():
     try:
         data = request.get_json()
@@ -338,7 +338,7 @@ def predict_irrigation():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@application.route("/water-flow", methods=["POST"])
+@app.route("/water-flow", methods=["POST"])
 def predict_water_flow():
     try:
         data = request.get_json()
@@ -376,7 +376,7 @@ def predict_water_flow():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@application.route("/predict-disease", methods=["POST"])
+@app.route("/predict-disease", methods=["POST"])
 def predict_disease():
     try:
         if "image" not in request.files:
@@ -437,10 +437,10 @@ def predict_disease():
         print("🔴 Error in /predict-disease:", e)
         return jsonify({"error": str(e)}), 500
 
-@application.route("/", methods=["GET"])
+@app.route("/", methods=["GET"])
 def home():
     return jsonify({"message": "JalSanvardhn Flask API is live 🚀"})
 
 if __name__ == "__main__":
-    application.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5002)))
+    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5002)))
 
