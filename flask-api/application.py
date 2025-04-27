@@ -242,7 +242,6 @@
 
 # if __name__ == "__main__":
 #     app.run(debug=True, port=5002)
-
 import os
 import uuid
 import re
@@ -264,9 +263,9 @@ from werkzeug.utils import secure_filename
 load_dotenv()
 
 # Initialize Flask app
-app = Flask(__name__)
-CORS(app, origins=[
-    "https://jalsanvardhn.onrender.com",
+application = Flask(__name__)  # Changed 'app' to 'application'
+CORS(application, origins=[
+    "http://jalsanvardhn-frontend.s3-website.ap-south-1.amazonaws.com",
     "https://jalsanvardhn-backend.onrender.com"
 ])
 
@@ -318,7 +317,7 @@ def preprocess_image(file_path):
     img_array = tf.expand_dims(img_array, axis=0)
     return img_array
 
-@app.route("/predict", methods=["POST"])
+@application.route("/predict", methods=["POST"])
 def predict_irrigation():
     try:
         data = request.get_json()
@@ -339,7 +338,7 @@ def predict_irrigation():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route("/water-flow", methods=["POST"])
+@application.route("/water-flow", methods=["POST"])
 def predict_water_flow():
     try:
         data = request.get_json()
@@ -377,7 +376,7 @@ def predict_water_flow():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route("/predict-disease", methods=["POST"])
+@application.route("/predict-disease", methods=["POST"])
 def predict_disease():
     try:
         if "image" not in request.files:
@@ -437,9 +436,11 @@ def predict_disease():
     except Exception as e:
         print("🔴 Error in /predict-disease:", e)
         return jsonify({"error": str(e)}), 500
-@app.route("/", methods=["GET"])
+
+@application.route("/", methods=["GET"])
 def home():
     return jsonify({"message": "JalSanvardhn Flask API is live 🚀"})
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5002)))
+    application.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5002)))
+
