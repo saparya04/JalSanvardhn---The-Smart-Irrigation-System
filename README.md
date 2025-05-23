@@ -25,15 +25,22 @@ An AI-powered smart irrigation platform that predicts whether irrigation is need
 
 ## 📸 Screenshots
 
-### 🌾 Crop Data Input Page
+### 🌾 Home page
+[![Screenshot-2025-05-23-130959.png](https://i.postimg.cc/NF30ZKw6/Screenshot-2025-05-23-130959.png)](https://postimg.cc/XBg3C7qq)
+[![Screenshot-2025-05-23-131259.png](https://i.postimg.cc/TPdP88B4/Screenshot-2025-05-23-131259.png)](https://postimg.cc/JsF8JFrN)
 
 
-### 🧠 Prediction: No Irrigation Needed
+### 🧠 Crop image page
+[![Screenshot-2025-05-23-131355.png](https://i.postimg.cc/fkQwB1x5/Screenshot-2025-05-23-131355.png)](https://postimg.cc/T5QMP7NW)
 
 
-### 💧 Prediction: Irrigation Needed
+### 💧 Crop Details page
+[![Screenshot-2025-05-23-131013.png](https://i.postimg.cc/dQbdb16N/Screenshot-2025-05-23-131013.png)](https://postimg.cc/4n1mtXrp)
 
-### 🦠 Disease Detection Output
+### 🦠 Crop report page
+[![Screenshot-2025-05-23-131023.png](https://i.postimg.cc/pLZF5BH3/Screenshot-2025-05-23-131023.png)](https://postimg.cc/K11zdB45)
+[![Screenshot-2025-05-23-131033.png](https://i.postimg.cc/65h3M5mv/Screenshot-2025-05-23-131033.png)](https://postimg.cc/gnnmJddz)
+[![Screenshot-2025-05-23-131041.png](https://i.postimg.cc/y8QNzpB6/Screenshot-2025-05-23-131041.png)](https://postimg.cc/BjF3TgXR)
 
 
 ---
