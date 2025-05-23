@@ -265,7 +265,7 @@ load_dotenv()
 # Initialize Flask app
 app = Flask(__name__)  # Changed 'app' to 'application'
 CORS(app, origins=[
-    "http://jalsanvardhn-frontend.s3-website.ap-south-1.amazonaws.com",
+    "https://jal-sanvardhn-the-smart-irrigation-system.vercel.app",
     "https://jalsanvardhn-backend.onrender.com"
 ])
 
