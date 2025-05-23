@@ -10,7 +10,7 @@ dotenv.config();
 const app = express();
 
 app.use(express.json());
-app.use(cors({ origin: "https://jal-sanvardhn-the-smart-irrigation-system.vercel.app",credentials: true }));
+app.use(cors({ origin: "https://jal-sanvardhn-the-smart-irrigation-system-mplx-lnjx5cn6x.vercel.app",credentials: true }));
 app.use(cookieParser());
 
 // Import Routes
